@@ -40,8 +40,6 @@ void setup() {
 
 ### C
 
-*put your answer here*
-
 ```processing
 class Thing {
   int a;
@@ -61,3 +59,21 @@ void setup() {
 }
 ```
 *put your answer here*
+
+### A
+
+**2**
+
+because `setup()` doesn’t call `go` function. the variable `a` has not been changed.
+
+### B
+
+**0**
+
+same as question A. `setup()` doesn’t call `go` function, so the `println` refers the first global variable which was declared with `0`.
+
+### C
+
+**3**
+
+because in `setup()`, new `thing` object is created with a parameter containing `2`. And also `go` function is called to add `1` to this parameter. Then, finally the object `thing` has `a` containing `3`.
