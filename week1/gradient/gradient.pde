@@ -1,11 +1,11 @@
 
-size(256, 256);
+size(768, 768);
 int totalPixels = width*height;
 
 loadPixels();
 
-// do something here!
 for (int i=0; i<totalPixels; i++) {
-  pixels[i] = color(i%width, i/height, 100);
+  pixels[i] = color(map(i%width, 0, width, 0, 256), map(i/height, 0, height, 0, 256), 100);
 }
+
 updatePixels();
