@@ -1,11 +1,19 @@
+int totalPixels;
 
-size(768, 768);
-int totalPixels = width*height;
-
-loadPixels();
-
-for (int i=0; i<totalPixels; i++) {
-  pixels[i] = color(map(i%width, 0, width, 0, 256), map(i/height, 0, height, 0, 256), 100);
+void setup() {
+  size(768, 768);
+  totalPixels = width*height;
 }
+void draw() {
+  loadPixels();
 
-updatePixels();
+  for (int i=0; i<totalPixels; i++) {
+    float rad = radians(i);
+    float r = map(i%width+(cos(rad)*100), 0, width, 0, 256);
+    float g = map(i/height+(i%3*100), 0, height, 0, 256);
+    float b = 256;
+    pixels[i] = color(r, g, b);
+  }
+
+  updatePixels();
+}
