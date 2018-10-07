@@ -2,7 +2,6 @@ class Ball {
   PVector pos, vel, other_vel, vel_m, accel;
   float radius;
   int r, g, b;
-  int counter;
 
   Ball(float x, float y, float radius) {
     pos = new PVector(x, y);
@@ -22,11 +21,11 @@ class Ball {
       vel.y *= -1;
     }
 
-    //vel.mult(0.9999);  // decrease speed
+    vel.mult(0.999);  // decrease speed
+    accel.limit(0.2);
     vel.add(accel);
     pos.add(vel);
     accel.mult(0);  // return to 0
-
   }
 
   void draw() {
@@ -42,8 +41,7 @@ class Ball {
         PVector dir = PVector.sub(pos, other.pos);  // direction
 
         if (dir.mag() < min_dist) {
-          println(dir, dir.mag());
-          dir.setMag(0.25);  // REVIEW Why this is needed?? @Shodai
+          dir.setMag(0.5);  // REVIEW Why this is needed?? @Shodai
           accel.add(dir);
           //other_vel = vel;
           //vel = other.vel;
@@ -53,17 +51,18 @@ class Ball {
   }
 
   void followMouse(float msX, float msY) {
-    counter++;
     // calcurate
     float x = msX - pos.x;
     float y = msY - pos.y;
     PVector dir = new PVector(x, y);
-    dir.normalize();
-    dir.mult(0.1);
-    //dist.x=constrain(dist.x,-0.1,0.1);
-    //dist.y=constrain(dist.y,-0.1,0.1);
+    float d = dir.mag();
+    if (d < 100) {
+      float m = map(d, 0, 100, 0, 2);
+      dir.setMag(m);
+    } else {
+      dir.setMag(2);
+    }
     accel.add(dir);
-    // udpate balls[i].vel
   }
 }
 
