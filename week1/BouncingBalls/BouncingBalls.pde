@@ -36,15 +36,12 @@ class Ball {
   void bump(Ball balls[]) {
     for (Ball other : balls) {
       if (this != other) {
-        //other_vel = other.vel;
         float min_dist = radius + other.radius;
-        PVector dir = PVector.sub(pos, other.pos);  // direction
+        PVector dir = PVector.sub(pos, other.pos);  // not distance exactly, direction? 
 
         if (dir.mag() < min_dist) {
-          dir.setMag(0.5);  // REVIEW Why this is needed?? @Shodai
+          dir.setMag(0.5);
           accel.add(dir);
-          //other_vel = vel;
-          //vel = other.vel;
         }
       }
     }
@@ -66,7 +63,7 @@ class Ball {
   }
 }
 
-Ball[] balls = new Ball[20];
+Ball[] balls = new Ball[15];
 
 void setup() {
   size(500, 500);
