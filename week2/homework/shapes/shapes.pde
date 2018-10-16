@@ -1,6 +1,10 @@
+int count = 0;
+
 ArrayList<Box> boxes = new ArrayList<Box>();
 int boxesPerLine = 30;
-Line line;
+
+ArrayList<Line> linesInCube = new ArrayList<Line>();
+float cubeSideLength = 500;
 
 void setup() {
   size(500, 500, P3D);
@@ -8,29 +12,50 @@ void setup() {
   fill(250, 50);
   blendMode(ADD);
 
-  //for (int i=0; i<boxesPerLine; i++) {
-  //  float x = i*10;
-  //  boxes.add(new Box(x, 0, 0));
-  //}
 
-
-  PVector start = new PVector(-width/2, -100, 0);
-  PVector end = new PVector(width/2, -100, 0);
-  line = new Line(start, end);
+  // Create a Cube with Lines
+  PVector p1 = new PVector(-cubeSideLength/2, -cubeSideLength/2, cubeSideLength/2);
+  PVector p2 = new PVector(cubeSideLength/2, -cubeSideLength/2, cubeSideLength/2);
+  PVector p3 = new PVector(cubeSideLength/2, -cubeSideLength/2, -cubeSideLength/2);
+  PVector p4 = new PVector(-cubeSideLength/2, -cubeSideLength/2, -cubeSideLength/2);
+  PVector p5 = new PVector(-cubeSideLength/2, cubeSideLength/2, cubeSideLength/2);
+  PVector p6 = new PVector(cubeSideLength/2, cubeSideLength/2, cubeSideLength/2);
+  PVector p7 = new PVector(cubeSideLength/2, cubeSideLength/2, -cubeSideLength/2);
+  PVector p8 = new PVector(-cubeSideLength/2, cubeSideLength/2, -cubeSideLength/2);
+  linesInCube.add(new Line(p1, p2));
+  linesInCube.add(new Line(p2, p3));
+  linesInCube.add(new Line(p3, p4));
+  linesInCube.add(new Line(p4, p1));
+  linesInCube.add(new Line(p1, p5));
+  linesInCube.add(new Line(p2, p6));
+  linesInCube.add(new Line(p3, p7));
+  linesInCube.add(new Line(p4, p8));
+  linesInCube.add(new Line(p5, p6));
+  linesInCube.add(new Line(p6, p7));
+  linesInCube.add(new Line(p7, p8));
+  linesInCube.add(new Line(p8, p5));
 }
+
 
 
 void draw() {
   background(30);
 
   translate(width / 2, height / 2, -600);
-  line.draw();
+  scale(sin(count*0.01));
+  count++;
+  rotateX(mouseY*-0.01);
+  rotateY(mouseX*-0.01);
+  //Draw a cube
+  for (Line l : linesInCube) {
+    l.draw();
+  }
 }
 
 
 
 class Box {
-  float boxSize = 10.0;
+  float boxSize = 8.0;
   float amt, vel;
   PVector pos;
 
@@ -47,7 +72,7 @@ class Box {
 
     pos = new PVector(x, y, z);
     amt += vel;
-    if (amt > 1){
+    if (amt > 1) {
       amt = 0;
     }
   }
@@ -68,23 +93,18 @@ class Line {
   Line(PVector a, PVector b) {
     start = new PVector(a.x, a.y, a.z);
     end = new PVector(b.x, b.y, b.z);
-    
+
     // setup boxes
     for (int i=0; i<boxes.length; i++) {
       boxes[i] = new Box();
     }
   }
 
-  void updateBoxes() {
-    for (Box b : boxes) {
-      b.update(start, end);
-    }
-  }
-
   void draw() {
-    stroke(255);
+    // Check
+    //stroke(255);
     //line(start.x, start.y, start.z, end.x, end.y, end.z);
-    noStroke();
+    //noStroke();
     for (Box b : boxes) {
       b.update(start, end);
       b.draw();
