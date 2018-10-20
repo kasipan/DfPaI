@@ -46,6 +46,7 @@ void draw() {
   count++;
   rotateX(mouseY*-0.01);
   rotateY(mouseX*-0.01);
+
   //Draw a cube
   for (Line l : linesInCube) {
     l.draw();
