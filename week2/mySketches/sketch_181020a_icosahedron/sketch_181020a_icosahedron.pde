@@ -30,20 +30,35 @@ void draw() {
 
 
   for (int i=0; i<vertexesMatrix.length; i++) {
-    //beginShape();
     for (int j=0; j<vertexesMatrix[i].length; j++) {
-      int z = j+1;
-      //vertex(vertexesMatrix[i][j][0],vertexesMatrix[i][j][1],vertexesMatrix[i][j][2]);  // testing
-      if (z > 3) {
-        z = 0;
-      }
 
-      PVector start  = new PVector(vertexesMatrix[i][j][0], vertexesMatrix[i][j][1], vertexesMatrix[i][j][2]);
-      PVector end  = new PVector(vertexesMatrix[i][z][0], vertexesMatrix[i][z][1], vertexesMatrix[i][z][2]);
-      // check every distance
-      line(start.x, start.y, start.z, end.x, end.y, end.z);
-      // drawline
+      PVector tgt = new PVector(vertexesMatrix[i][j][0], vertexesMatrix[i][j][1], vertexesMatrix[i][j][2]);
+
+      // for Check ---
+      //stroke(0,0,200);
+      //int z = j+1;
+      //if (z > 3) {
+      //  z = 0;
+      //}
+      //PVector start  = new PVector(vertexesMatrix[i][j][0], vertexesMatrix[i][j][1], vertexesMatrix[i][j][2]);
+      //PVector end  = new PVector(vertexesMatrix[i][z][0], vertexesMatrix[i][z][1], vertexesMatrix[i][z][2]);
+      //line(start.x, start.y, start.z, end.x, end.y, end.z);
+      //stroke(250);
+      // ---------------
+
+      // Check distance and draw line
+      for (int ii=0; ii<vertexesMatrix.length; ii++) {
+        for (int jj=0; jj<vertexesMatrix[ii].length; jj++) {
+          PVector cmp = new PVector(vertexesMatrix[ii][jj][0], vertexesMatrix[ii][jj][1], vertexesMatrix[ii][jj][2]);
+          float dist = PVector.dist(tgt, cmp);
+          //println(int(dist));
+          if (int(dist) == l*2) {
+            line(tgt.x, tgt.y, tgt.z, cmp.x, cmp.y, cmp.z);  // drawline
+            
+          }
+        }
+      }
     }
-    //endShape(CLOSE);
   }
+  
 }
