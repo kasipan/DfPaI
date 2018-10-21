@@ -1,7 +1,10 @@
 int count = 0;
-
 ArrayList<Box> boxes = new ArrayList<Box>();
-int boxesPerLine = 30;
+int boxesPerLine = 24;
+
+ArrayList<Line> linesInIcosahedron = new ArrayList<Line>();
+final float gr = (1.0 + sqrt(5))/2;  // golden ratio
+float tl = 200;  //icosahedron's triagle line's length
 
 ArrayList<Line> linesInCube = new ArrayList<Line>();
 float cubeSideLength = 500;
@@ -11,7 +14,6 @@ void setup() {
   noStroke();
   fill(250, 50);
   blendMode(ADD);
-
 
   // Create a Cube with Lines
   PVector p1 = new PVector(-cubeSideLength/2, -cubeSideLength/2, cubeSideLength/2);
@@ -34,6 +36,31 @@ void setup() {
   linesInCube.add(new Line(p6, p7));
   linesInCube.add(new Line(p7, p8));
   linesInCube.add(new Line(p8, p5));
+  
+  // Create a icosa with Lines
+  float[][][] vertexesMatrix = {
+    {{tl*gr, 0, tl}, {tl*gr, 0, -tl}, {-tl*gr, 0, -tl}, {-tl*gr, 0, tl}}, // X dimention
+    {{tl, tl*gr, 0}, {-tl, tl*gr, 0}, {-tl, -tl*gr, 0}, {tl, -tl*gr, 0}}, // Y dimention
+    {{0, tl, tl*gr}, {0, -tl, tl*gr}, {0, -tl, -tl*gr}, {0, tl, -tl*gr}}  // Z dimention
+  };
+  for (int i=0; i<vertexesMatrix.length; i++) {
+    for (int j=0; j<vertexesMatrix[i].length; j++) {
+      PVector tgt = new PVector(vertexesMatrix[i][j][0], vertexesMatrix[i][j][1], vertexesMatrix[i][j][2]);
+      
+      // Check distance and draw line
+      for (int ii=0; ii<vertexesMatrix.length; ii++) {
+        for (int jj=0; jj<vertexesMatrix[ii].length; jj++) {
+          PVector cmp = new PVector(vertexesMatrix[ii][jj][0], vertexesMatrix[ii][jj][1], vertexesMatrix[ii][jj][2]);
+          float dist = PVector.dist(tgt, cmp);
+          //println(int(dist));
+          if (int(dist) == int(tl*2)) {
+            linesInIcosahedron.add(new Line(tgt, cmp));
+          }
+        }
+      }
+    }
+  }
+  
 }
 
 
@@ -43,14 +70,22 @@ void draw() {
 
   translate(width / 2, height / 2, -600);
   scale(sin(count*0.01));
-  count++;
-  rotateX(mouseY*-0.01);
   rotateY(mouseX*-0.01);
-
-  //Draw a cube
-  for (Line l : linesInCube) {
-    l.draw();
+  rotateX(mouseY*-0.01);
+  
+  if(sin(count*0.01) > sin(PI)){
+    // 1st cycle of count is for drawing a icosahedron 
+    for (Line l : linesInIcosahedron){
+      l.draw();
+    }
+  } else {
+    // 2nd cycle is drawing a cube
+    for (Line l : linesInCube) {
+      l.draw();
+    }
   }
+  count++;
+
 }
 
 
@@ -64,7 +99,6 @@ class Box {
     vel = random(0.001);
     amt = random(1);  // box's position should be between start and end point
   }
-
 
   void update(PVector start, PVector end) {
     float x = lerp(start.x, end.x, amt);

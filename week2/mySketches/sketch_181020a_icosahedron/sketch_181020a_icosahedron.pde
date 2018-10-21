@@ -27,8 +27,6 @@ void draw() {
     {{0, l, l*gr}, {0, -l, l*gr}, {0, -l, -l*gr}, {0, l, -l*gr}}  // Z dimention
   };
 
-
-
   for (int i=0; i<vertexesMatrix.length; i++) {
     for (int j=0; j<vertexesMatrix[i].length; j++) {
 
