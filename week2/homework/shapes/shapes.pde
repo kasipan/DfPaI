@@ -1,6 +1,5 @@
-int count = 0;
 ArrayList<Box> boxes = new ArrayList<Box>();
-int boxesPerLine = 24;
+int boxesPerLine = 30;
 
 ArrayList<Line> linesInIcosahedron = new ArrayList<Line>();
 final float gr = (1.0 + sqrt(5))/2;  // golden ratio
@@ -8,6 +7,7 @@ float tl = 200;  //icosahedron's triagle line's length
 
 ArrayList<Line> linesInCube = new ArrayList<Line>();
 float cubeSideLength = 500;
+
 
 void setup() {
   size(500, 500, P3D);
@@ -36,23 +36,29 @@ void setup() {
   linesInCube.add(new Line(p6, p7));
   linesInCube.add(new Line(p7, p8));
   linesInCube.add(new Line(p8, p5));
-  
+
   // Create a icosa with Lines
-  float[][][] vertexesMatrix = {
-    {{tl*gr, 0, tl}, {tl*gr, 0, -tl}, {-tl*gr, 0, -tl}, {-tl*gr, 0, tl}}, // X dimention
-    {{tl, tl*gr, 0}, {-tl, tl*gr, 0}, {-tl, -tl*gr, 0}, {tl, -tl*gr, 0}}, // Y dimention
-    {{0, tl, tl*gr}, {0, -tl, tl*gr}, {0, -tl, -tl*gr}, {0, tl, -tl*gr}}  // Z dimention
+  //float[][][] vertexIndices_old = {
+  //  {{tl*gr, 0, tl}, {tl*gr, 0, -tl}, {-tl*gr, 0, -tl}, {-tl*gr, 0, tl}}, // X dimention
+  //  {{tl, tl*gr, 0}, {-tl, tl*gr, 0}, {-tl, -tl*gr, 0}, {tl, -tl*gr, 0}}, // Y dimention
+  //  {{0, tl, tl*gr}, {0, -tl, tl*gr}, {0, -tl, -tl*gr}, {0, tl, -tl*gr}}  // Z dimention
+  //};
+  
+  PVector[][] vertexIndices = {
+    {new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl)}, // X dimention
+    {new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0)}, // Y dimention
+    {new PVector(0, tl, tl*gr), new PVector(0, -tl, tl*gr), new PVector(0, -tl, -tl*gr), new PVector(0, tl, -tl*gr)}  // Z dimention
   };
-  for (int i=0; i<vertexesMatrix.length; i++) {
-    for (int j=0; j<vertexesMatrix[i].length; j++) {
-      PVector tgt = new PVector(vertexesMatrix[i][j][0], vertexesMatrix[i][j][1], vertexesMatrix[i][j][2]);
-      
+  
+  for (int i=0; i<vertexIndices.length; i++) {
+    for (int j=0; j<vertexIndices[i].length; j++) {
+      PVector tgt = vertexIndices[i][j];
+
       // Check distance and draw line
-      for (int ii=0; ii<vertexesMatrix.length; ii++) {
-        for (int jj=0; jj<vertexesMatrix[ii].length; jj++) {
-          PVector cmp = new PVector(vertexesMatrix[ii][jj][0], vertexesMatrix[ii][jj][1], vertexesMatrix[ii][jj][2]);
+      for (int ii=0; ii<vertexIndices.length; ii++) {
+        for (int jj=0; jj<vertexIndices[ii].length; jj++) {
+          PVector cmp = vertexIndices[ii][jj];
           float dist = PVector.dist(tgt, cmp);
-          //println(int(dist));
           if (int(dist) == int(tl*2)) {
             linesInIcosahedron.add(new Line(tgt, cmp));
           }
@@ -60,7 +66,6 @@ void setup() {
       }
     }
   }
-  
 }
 
 
@@ -68,14 +73,14 @@ void setup() {
 void draw() {
   background(30);
 
-  translate(width / 2, height / 2, -600);
-  scale(sin(count*0.01));
-  rotateY(mouseX*-0.01);
-  rotateX(mouseY*-0.01);
+  translate(width / 2, height / 2, -500);
+  rotateX(frameCount*0.003);
+  rotateY(frameCount*0.003);
+  scale(sin(frameCount*0.01));  // scale whole
   
-  if(sin(count*0.01) > sin(PI)){
-    // 1st cycle of count is for drawing a icosahedron 
-    for (Line l : linesInIcosahedron){
+  if (sin(frameCount*0.01) > sin(PI)) {
+    // 1st cycle is for drawing a icosahedron 
+    for (Line l : linesInIcosahedron) {
       l.draw();
     }
   } else {
@@ -84,8 +89,7 @@ void draw() {
       l.draw();
     }
   }
-  count++;
-
+  
 }
 
 
@@ -115,8 +119,10 @@ class Box {
   void draw() {
     pushMatrix();
     translate(pos.x, pos.y, pos.z);
+    scale(1/sin(frameCount*0.01));  // fix box's size
     box(boxSize);
     popMatrix();
+    
   }
 }
 
@@ -136,10 +142,6 @@ class Line {
   }
 
   void draw() {
-    // Check
-    //stroke(255);
-    //line(start.x, start.y, start.z, end.x, end.y, end.z);
-    //noStroke();
     for (Box b : boxes) {
       b.update(start, end);
       b.draw();
