@@ -75,17 +75,17 @@ void draw() {
   rotateY(frameCount*0.003);
   scale(sin(frameCount*0.01));  // scale whole
 
-  //if (sin(frameCount*0.01) > sin(PI)) {
-    // 1st cycle is for drawing a icosahedron 
+  if (sin(frameCount*0.01) > sin(PI)) {
+     //1st cycle is for drawing a icosahedron 
     for (Line l : linesInIcosahedron) {
       l.draw();
     }
- // } else {
-    // 2nd cycle is drawing a cube
-   // for (Line l : linesInCube) {
-     // l.draw();
-   // }
-  //}
+  } else {
+     //2nd cycle is drawing a cube
+    for (Line l : linesInCube) {
+      l.draw();
+    }
+  }
 }
 
 
