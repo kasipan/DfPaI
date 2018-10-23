@@ -43,30 +43,27 @@ void setup() {
   //  {{tl, tl*gr, 0}, {-tl, tl*gr, 0}, {-tl, -tl*gr, 0}, {tl, -tl*gr, 0}}, // Y dimention
   //  {{0, tl, tl*gr}, {0, -tl, tl*gr}, {0, -tl, -tl*gr}, {0, tl, -tl*gr}}  // Z dimention
   //};
-  
-  PVector[][] vertexIndices = {
-    {new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl)}, // X dimention
-    {new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0)}, // Y dimention
-    {new PVector(0, tl, tl*gr), new PVector(0, -tl, tl*gr), new PVector(0, -tl, -tl*gr), new PVector(0, tl, -tl*gr)}  // Z dimention
-  };
-  
-  for (int i=0; i<vertexIndices.length; i++) {
-    for (int j=0; j<vertexIndices[i].length; j++) {
-      PVector tgt = vertexIndices[i][j];
 
-      // Check distance and draw line
-      for (int ii=0; ii<vertexIndices.length; ii++) {
-        for (int jj=0; jj<vertexIndices[ii].length; jj++) {
-          PVector cmp = vertexIndices[ii][jj];
-          float dist = PVector.dist(tgt, cmp);
-          if (int(dist) == int(tl*2)) {
-            linesInIcosahedron.add(new Line(tgt, cmp));
-          }
-        }
+  PVector[] vertexIndices = {
+    new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl), // X dimention
+    new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0), // Y dimention
+    new PVector(0, tl, tl*gr), new PVector(0, -tl, tl*gr), new PVector(0, -tl, -tl*gr), new PVector(0, tl, -tl*gr)  // Z dimention
+  };
+
+  for (int i=0; i<vertexIndices.length; i++) {
+    PVector tgt = vertexIndices[i];
+
+    // Check distance and draw line
+    for (int j=i+1; j<vertexIndices.length; j++) {
+      PVector cmp = vertexIndices[j];
+      float dist = PVector.dist(tgt, cmp);
+      if (int(dist) == int(tl*2)) {
+        linesInIcosahedron.add(new Line(tgt, cmp));
       }
     }
   }
 }
+
 
 
 
@@ -77,19 +74,18 @@ void draw() {
   rotateX(frameCount*0.003);
   rotateY(frameCount*0.003);
   scale(sin(frameCount*0.01));  // scale whole
-  
-  if (sin(frameCount*0.01) > sin(PI)) {
+
+  //if (sin(frameCount*0.01) > sin(PI)) {
     // 1st cycle is for drawing a icosahedron 
     for (Line l : linesInIcosahedron) {
       l.draw();
     }
-  } else {
+ // } else {
     // 2nd cycle is drawing a cube
-    for (Line l : linesInCube) {
-      l.draw();
-    }
-  }
-  
+   // for (Line l : linesInCube) {
+     // l.draw();
+   // }
+  //}
 }
 
 
@@ -122,7 +118,6 @@ class Box {
     scale(1/sin(frameCount*0.01));  // fix box's size
     box(boxSize);
     popMatrix();
-    
   }
 }
 
