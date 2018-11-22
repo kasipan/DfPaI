@@ -37,13 +37,6 @@ void setup() {
   linesInCube.add(new Line(p7, p8));
   linesInCube.add(new Line(p8, p5));
 
-  // Create a icosa with Lines
-  //float[][][] vertexIndices_old = {
-  //  {{tl*gr, 0, tl}, {tl*gr, 0, -tl}, {-tl*gr, 0, -tl}, {-tl*gr, 0, tl}}, // X dimention
-  //  {{tl, tl*gr, 0}, {-tl, tl*gr, 0}, {-tl, -tl*gr, 0}, {tl, -tl*gr, 0}}, // Y dimention
-  //  {{0, tl, tl*gr}, {0, -tl, tl*gr}, {0, -tl, -tl*gr}, {0, tl, -tl*gr}}  // Z dimention
-  //};
-
   PVector[] vertexIndices = {
     new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl), // X dimention
     new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0), // Y dimention
@@ -126,9 +119,9 @@ class Line {
   PVector start, end;
   Box[] boxes= new Box[boxesPerLine];
 
-  Line(PVector a, PVector b) {
-    start = new PVector(a.x, a.y, a.z);
-    end = new PVector(b.x, b.y, b.z);
+  Line(PVector start, PVector end) {
+    this.start = new PVector(start.x, start.y, start.z);
+    this.end = new PVector(end.x, end.y, end.z);
 
     // setup boxes
     for (int i=0; i<boxes.length; i++) {
