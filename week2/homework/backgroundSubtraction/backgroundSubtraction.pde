@@ -8,7 +8,7 @@ Capture capture;
 
 int pixelsNum;
 color[] backgroundPixels, currentPixels;
-int threshold = 100;
+int threshold = 30;
 Boolean showEffect = false;
 PImage bg;
 
@@ -37,24 +37,16 @@ void draw() {
       currentPixels = capture.pixels;  // update pixels array
 
       for (int i=0; i<backgroundPixels.length; i++) {
-        //int currentColor = currentPixels[i];    // maybe it should use HSV 
-        int R = (currentPixels[i] >> 16) & 0xFF;
-        int G = (currentPixels[i] >> 8) & 0xFF;
-        int B = currentPixels[i] & 0xFF;
+        float currentHue = hue(currentPixels[i]);    // maybe it should use HSV 
+        float currentSat = saturation(currentPixels[i]);
 
-        //println(R,G,B);
+        float bgHue = hue(backgroundPixels[i]); 
+        float bgSat = saturation(backgroundPixels[i]);
+        
+        float diff = abs(currentHue-bgHue) + abs(currentSat-bgSat);
 
-        //color bgColor = backgroundPixels[i];
-        int bR = (backgroundPixels[i] >> 16) & 0xFF;
-        int bG = (backgroundPixels[i] >> 8) & 0xFF;
-        int bB = backgroundPixels[i] & 0xFF;
-
-        int diffR = abs(R - bR);
-        int diffG = abs(R - bG);
-        int diffB = abs(R - bB);
-
-        // if there is large gap, show captured pixel
-        if (diffR+diffG+diffB > threshold) {
+        // if there is a large gap, show captured pixel
+        if (diff > threshold) {
           pixels[i] = currentPixels[i];
         }
       }
