@@ -1,0 +1,5 @@
+shape,x,time
+circle,100,0.1
+circle,230,0.6
+rect,50,0.2
+rect,400,1.2

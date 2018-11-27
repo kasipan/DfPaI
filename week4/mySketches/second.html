@@ -1,0 +1,25 @@
+
+  <style media="screen">
+    #container {
+      width:80%;
+      height:100%;
+      background:#ffaaaa;
+    }
+  </style>
+
+  <div id="container"></div>
+
+  <script type="text/javascript">
+    var socket = new WebSocket("ws://192.168.0.12:9999/data");
+    var body = document.querySelector("body");
+    var id = Math.random();
+    body.onmousemove = function(e){
+      var x = e.clientX;
+      var y = e.clientY;
+
+      if(socket.readyState === WebSocket.OPEN){
+        socket.send(id+','+x+','+y);
+        console.log("sent");
+      }
+    }
+  </script>

@@ -1,0 +1,32 @@
+<html>
+  <h1>hoge</h1>
+  <p>fugaterminal</p>
+  <p id="thing">thing</p>
+
+  <p id="ball" style="position:absolute; top:100px;">ball</p>
+
+  <script type="text/javascript">
+    var a = "unk";
+    var b = 1;
+    console.log(a+b);
+
+    function writeText(){
+      var span = document.querySelector("#thing");
+      var date = new Date();
+      span.innerHTML = date;
+    }
+    setInterval(writeText, 1000);
+
+    var count = 0;
+    var v = 1;
+    function bounsing(){
+      var span = document.querySelector("#ball");
+      span.style.left = count;
+      count+=v;
+      if(span.style.left>window.innerWidth){
+        v = -v;
+      }
+    }
+    setInterval(bounsing, 10);
+  </script>
+</html>
