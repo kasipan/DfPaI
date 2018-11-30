@@ -64,13 +64,13 @@ class Line {
 
   Line(String name, String lineColor) {
     this.name = name;
-    this.lineColor = unhex("88" + lineColor.substring(1));
+    this.lineColor = unhex("88" + lineColor.substring(1));  // convert string data to color with alpha
     println("added " + this.name + "("+ lineColor +")");
   }
 
   void addStop(float lat, float lon) {
     stops.add(new PVector(lon, lat));
-    println("added stop data to "+name+" : "+lon, lat);
+    println("added stop's data to "+name+" : "+lon, lat);
   }
 
   void draw() {
