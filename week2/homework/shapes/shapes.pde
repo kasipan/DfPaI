@@ -37,6 +37,7 @@ void setup() {
   linesInCube.add(new Line(p7, p8));
   linesInCube.add(new Line(p8, p5));
 
+  // Create an Icosahededron
   PVector[] vertexIndices = {
     new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl), // X dimention
     new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0), // Y dimention
