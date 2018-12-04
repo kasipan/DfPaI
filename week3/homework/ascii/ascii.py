@@ -1,6 +1,10 @@
 from PIL import Image
 
-threshold = 50
+threshold = {
+    'dark': 25,
+    'gray': 50,
+    'lightGray': 75
+}
 img = Image.open("img.png")
 
 # resize the image so that it doesn't look so portrait when printed
@@ -20,9 +24,13 @@ for y in range(height):
     for x in range(width):
         brightness = max(pixels[x,y]) / 255 * 100
         print(x,y)
-        if brightness < threshold:
+        if brightness < threshold['dark']:
+            charsList.append('&')
+        elif brightness < threshold['gray']:
+            charsList.append('s')
+        elif brightness < threshold['lightGray']:
             charsList.append('.')
-        else:
+        else:   # light
             charsList.append(' ')
     charsList.append('\n')
 
