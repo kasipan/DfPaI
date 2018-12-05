@@ -1,18 +1,21 @@
 final float SLIDER_W = 200;
 final float SLIDER_H = 20;
 final float STROKE_W = 1;
+final float MAX_INDICATOR_W = SLIDER_W-STROKE_W;
 
 ArrayList<Slider> sliders = new ArrayList<Slider>();
+float r,g,b = 0;
 
 
 void setup() {
   size(500, 500);
   background(0);
 
-  sliders.add(new Slider(100, 100));
+  sliders.add(new Slider((width-SLIDER_W)/2, (height-SLIDER_H)/2));
 }
 
 void draw() {
+  background(r,g,b);
   for (Slider s : sliders) {
     if (s.update_flag) {
       s.update(mouseX, mouseY);
@@ -60,14 +63,20 @@ class Slider {
   void update(float mx, float my) {
     //handle_x = mx;
     //handle_y = pos_y;
+    
 
     indicator_w = mx - pos_x+STROKE_W;
     indicator_h = SLIDER_H;
     if (indicator_w < 0) {
       indicator_w = 0;  // min
-    } else if (indicator_w > SLIDER_W-STROKE_W) {
-      indicator_w = SLIDER_W-STROKE_W;  // max
+    } else if (indicator_w > MAX_INDICATOR_W) {
+      indicator_w = MAX_INDICATOR_W;  // max
     }
+    
+    // update background color
+    r = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+    g = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+    b = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
   }
 
   void draw() {
