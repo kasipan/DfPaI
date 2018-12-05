@@ -1,6 +1,6 @@
 from wand.image import Image
 
-fileName = input("Input filename with its extension: ")
+fileName = input("Input a file name with its extension: ")
 img = Image(filename=fileName)
 
 height = img.height
