@@ -4,18 +4,20 @@ final float STROKE_W = 1;
 final float MAX_INDICATOR_W = SLIDER_W-STROKE_W;
 
 ArrayList<Slider> sliders = new ArrayList<Slider>();
-float r,g,b = 0;
+float r, g, b = 0;
 
 
 void setup() {
   size(500, 500);
   background(0);
 
-  sliders.add(new Slider((width-SLIDER_W)/2, (height-SLIDER_H)/2));
+  sliders.add(new Slider((width-SLIDER_W)/2, (height-SLIDER_H)/2-SLIDER_H, "red"));
+  sliders.add(new Slider((width-SLIDER_W)/2, (height-SLIDER_H)/2, "green"));
+  sliders.add(new Slider((width-SLIDER_W)/2, (height-SLIDER_H)/2+SLIDER_H, "blue"));
 }
 
 void draw() {
-  background(r,g,b);
+  background(r, g, b);
   for (Slider s : sliders) {
     if (s.update_flag) {
       s.update(mouseX, mouseY);
@@ -44,16 +46,18 @@ void mouseReleased() {
 
 class Slider {
   float pos_x, pos_y;
-  float indicator_w, indicator_h;  // only for x-index
+  float indicator_w, indicator_h;
   //float handle_x, handle_y;
   boolean update_flag;
   float slider_bgcolor = 0;
   float indicator_color = 220;
+  String hue;
 
 
-  Slider(float x, float y) {
+  Slider(float x, float y, String hue) {
     pos_x = x;
     pos_y = y;
+    this.hue = hue;
   }
 
   Boolean checkMouseover(float mx, float my) {
@@ -63,7 +67,7 @@ class Slider {
   void update(float mx, float my) {
     //handle_x = mx;
     //handle_y = pos_y;
-    
+
 
     indicator_w = mx - pos_x+STROKE_W;
     indicator_h = SLIDER_H;
@@ -72,11 +76,19 @@ class Slider {
     } else if (indicator_w > MAX_INDICATOR_W) {
       indicator_w = MAX_INDICATOR_W;  // max
     }
-    
+
     // update background color
-    r = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
-    g = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
-    b = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+    switch(hue) {
+      case "red":
+        r = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+        break;
+      case "green":
+        g = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+        break;
+      case "blue":
+        b = map(indicator_w, 0, MAX_INDICATOR_W, 0, 255);
+        break;
+    }
   }
 
   void draw() {
