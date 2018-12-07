@@ -1,6 +1,5 @@
 import requests
 from lxml import etree
-import time
 
 urls = [
     'https://en.wikipedia.org/wiki/List_of_craters_on_the_Moon:_A%E2%80%93B',
@@ -16,25 +15,34 @@ parser = etree.HTMLParser()
 
 def get_coords(url):
     res = requests.get(url)
-
     tree = etree.fromstring(res.text, parser)
-    coords = tree.xpath('//span[@class="geo"]/text()')
 
-    return coords
+    data={
+        "coords" : [],
+        "dias" : []
+    }
+    data['coords'] = tree.xpath('//span[@class="geo"]/text()')
+    data['dias'] = tree.xpath('//tbody[1]/tr/td[3]/text()')
+
+    return data
 
 
 all_coords = []
+all_dias = []
 for url in urls:
-    coords = get_coords(url)
-    all_coords += coords
-    #  ^ this is the same as all_coords.extend(coords)
+    data = get_coords(url)
+    print(data)
+    all_coords += data['coords']
+    print('added {} coords'.format(len(data['coords'])))
+    all_dias += data['dias']
+    print('added {} dias'.format(len(data['dias'])))
 
-    print('added {} coords'.format(len(coords)))
+print('total of {} in coords'.format(len(all_coords)))
+print('total of {} in dias'.format(len(all_dias)))
 
-print('total of {}'.format(len(all_coords)))
-
-with open('moon_crater_coords.csv', 'w') as f:
-    f.write('lat,lon\n')
-    for coord in all_coords:
-        lat, lon = coord.split('; ')
-        f.write('{},{}\n'.format(lat, lon))
+with open('./data/moon_crater_coords.csv', 'w') as f:
+    f.write('lat,lon,dia\n')
+    for i in range( len(all_coords) ):
+        lat, lon = all_coords[i].split('; ')
+        f.write('{},{},'.format(lat, lon))
+        f.write('{}\n'.format(all_dias[i]))

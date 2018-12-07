@@ -66,14 +66,14 @@ void draw() {
         float currentSat = saturation(currentPixels[i]);
         float currentBrt = brightness(currentPixels[i]);
 
-        float bgHue = hue(backgroundPixels[i]); 
-        float bgSat = saturation(backgroundPixels[i]);
-        float bgBrt = brightness(backgroundPixels[i]);
+        float beforeHue = hue(backgroundPixels[i]); 
+        float beforeSat = saturation(backgroundPixels[i]);
+        float beforeBrt = brightness(backgroundPixels[i]);
 
 
-        float diffHue = calcurateDiffInCycle(currentHue, bgHue, 360);
-        float diffSat = calcurateDiffInCycle(currentSat, bgSat, 100);
-        float diffBrt = calcurateDiffInCycle(currentBrt, bgBrt, 100);
+        float diffHue = calcurateDiffInCycle(currentHue, beforeHue, 360);
+        float diffSat = calcurateDiffInCycle(currentSat, beforeSat, 100);
+        float diffBrt = calcurateDiffInCycle(currentBrt, beforeBrt, 100);
         //println(diffHue, diffSat);
 
         // if there is a large gap, show current caputured pixel
@@ -84,7 +84,6 @@ void draw() {
 
 
       updatePixels();
-      //filter(THRESHOLD);
     } else {
 
       image(capture, 0, 0);  // show just captured image.

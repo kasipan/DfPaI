@@ -14,7 +14,7 @@ with open('tubeStops.json', 'r') as f:
 
 
 
-#lines = {}      # Set a dictionary for lines {"name":xxxx, "stops":{1:"station1", 2:"station2" ... }}
+#lines = {}      # Set a dictionary for lines {"name":xxxx, "stops":{1:"station1", 2:"station2" ... }} -> toooo long to send
 lines = []
 colorIndex = {
     'District': '#007a33',
