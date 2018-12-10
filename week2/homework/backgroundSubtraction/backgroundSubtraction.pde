@@ -9,9 +9,10 @@ Capture capture;
 
 int pixelsNum;
 color[] backgroundPixels, currentPixels;
-float THRESHOLD_HUE = 5;
-float THRESHOLD_SAT = 2;
+float THRESHOLD_HUE = 0.5;
+float THRESHOLD_SAT = 8.5;
 float THRESHOLD_BRT = 0;
+float THRESHOLD_RGB = 200; 
 Boolean showEffect = false;
 PImage bg;
 
@@ -46,6 +47,11 @@ void setup() {
     .setWidth(200)
     .setRange(0, 100)
     ;
+  cp5.addSlider("THRESHOLD_RGB")
+    .setPosition(20, 80)
+    .setWidth(200)
+    .setRange(0, 300)
+    ;
 }
 
 
@@ -60,24 +66,32 @@ void draw() {
       currentPixels = capture.pixels;  // update pixels array
 
 
-
       for (int i=0; i<backgroundPixels.length; i++) {
         float currentHue = hue(currentPixels[i]);    // maybe it should use HSV 
         float currentSat = saturation(currentPixels[i]);
         float currentBrt = brightness(currentPixels[i]);
+        int R = (currentPixels[i] >> 16) & 0xFF;
+        int G = (currentPixels[i] >> 8) & 0xFF;
+        int B = currentPixels[i] & 0xFF;
 
         float beforeHue = hue(backgroundPixels[i]); 
         float beforeSat = saturation(backgroundPixels[i]);
         float beforeBrt = brightness(backgroundPixels[i]);
-
+        int bR = (backgroundPixels[i] >> 16) & 0xFF;
+        int bG = (backgroundPixels[i] >> 8) & 0xFF;
+        int bB = backgroundPixels[i] & 0xFF;
 
         float diffHue = calcurateDiffInCycle(currentHue, beforeHue, 360);
         float diffSat = calcurateDiffInCycle(currentSat, beforeSat, 100);
         float diffBrt = calcurateDiffInCycle(currentBrt, beforeBrt, 100);
         //println(diffHue, diffSat);
-
+        int diffR = abs(R - bR);
+        int diffG = abs(G - bG);
+        int diffB = abs(B - bB);
+        
+        
         // if there is a large gap, show current caputured pixel
-        if (diffHue > THRESHOLD_HUE && diffSat > THRESHOLD_SAT && diffBrt > THRESHOLD_BRT) {
+        if (diffHue > THRESHOLD_HUE && diffSat > THRESHOLD_SAT && diffBrt > THRESHOLD_BRT ||  diffR+diffG+diffB > THRESHOLD_RGB) {
           pixels[i] = currentPixels[i];
         }
       }
