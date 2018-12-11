@@ -24,7 +24,7 @@ void draw() {
     for (Line l : lines) {
       for (Stop s : l.stops) {
         if (dist(s.pos.x, s.pos.y, mouseX, mouseY) < mouseRange) {
-          l.vibe = 5;
+          l.vibe = 8;
         }
       }
       l.update();

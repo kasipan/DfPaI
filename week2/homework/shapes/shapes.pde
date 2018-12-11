@@ -3,10 +3,11 @@ int boxesPerLine = 30;
 
 ArrayList<Line> linesInIcosahedron = new ArrayList<Line>();
 final float gr = (1.0 + sqrt(5))/2;  // golden ratio
-float tl = 200;  //icosahedron's triagle line's length
+float tl = 200;  //triagle line's length in icosahedron's surface 
 
 ArrayList<Line> linesInCube = new ArrayList<Line>();
-float cubeSideLength = 500;
+float cl = 500;  // Cube's side length. 
+float cl_h = cl/2;
 
 
 void setup() {
@@ -16,40 +17,36 @@ void setup() {
   blendMode(ADD);
 
   // Create a Cube with Lines
-  PVector p1 = new PVector(-cubeSideLength/2, -cubeSideLength/2, cubeSideLength/2);
-  PVector p2 = new PVector(cubeSideLength/2, -cubeSideLength/2, cubeSideLength/2);
-  PVector p3 = new PVector(cubeSideLength/2, -cubeSideLength/2, -cubeSideLength/2);
-  PVector p4 = new PVector(-cubeSideLength/2, -cubeSideLength/2, -cubeSideLength/2);
-  PVector p5 = new PVector(-cubeSideLength/2, cubeSideLength/2, cubeSideLength/2);
-  PVector p6 = new PVector(cubeSideLength/2, cubeSideLength/2, cubeSideLength/2);
-  PVector p7 = new PVector(cubeSideLength/2, cubeSideLength/2, -cubeSideLength/2);
-  PVector p8 = new PVector(-cubeSideLength/2, cubeSideLength/2, -cubeSideLength/2);
-  linesInCube.add(new Line(p1, p2));
-  linesInCube.add(new Line(p2, p3));
-  linesInCube.add(new Line(p3, p4));
-  linesInCube.add(new Line(p4, p1));
-  linesInCube.add(new Line(p1, p5));
-  linesInCube.add(new Line(p2, p6));
-  linesInCube.add(new Line(p3, p7));
-  linesInCube.add(new Line(p4, p8));
-  linesInCube.add(new Line(p5, p6));
-  linesInCube.add(new Line(p6, p7));
-  linesInCube.add(new Line(p7, p8));
-  linesInCube.add(new Line(p8, p5));
+  PVector[] cubeVertexIndices = {
+    new PVector(-cl_h, -cl_h, cl_h), new PVector(cl_h, -cl_h, cl_h), new PVector(cl_h, -cl_h, -cl_h), new PVector(-cl_h, -cl_h, -cl_h), // Top
+    new PVector(-cl_h, cl_h, cl_h), new PVector(cl_h, cl_h, cl_h), new PVector(cl_h, cl_h, -cl_h), new PVector(-cl_h, cl_h, -cl_h)  // Bottom
+  };
+  for (int i=0; i<cubeVertexIndices.length; i++) {
+    PVector tgt = cubeVertexIndices[i];
 
-  // Create an Icosahededron
-  PVector[] vertexIndices = {
+    for (int j=i+1; j<cubeVertexIndices.length; j++) {
+      PVector cmp = cubeVertexIndices[j];
+      // Create an Icosahededron
+      float dist = PVector.dist(tgt, cmp);
+      if (int(dist) == cl) {
+        linesInCube.add(new Line(tgt, cmp));
+      }
+    }
+  }
+
+
+  // Create a Icosahedron with Lines
+  PVector[] icosaVertexIndices = {
     new PVector(tl*gr, 0, tl), new PVector(tl*gr, 0, -tl), new PVector(-tl*gr, 0, -tl), new PVector(-tl*gr, 0, tl), // X dimention
     new PVector(tl, tl*gr, 0), new PVector(-tl, tl*gr, 0), new PVector(-tl, -tl*gr, 0), new PVector(tl, -tl*gr, 0), // Y dimention
     new PVector(0, tl, tl*gr), new PVector(0, -tl, tl*gr), new PVector(0, -tl, -tl*gr), new PVector(0, tl, -tl*gr)  // Z dimention
   };
+  for (int i=0; i<icosaVertexIndices.length; i++) {
+    PVector tgt = icosaVertexIndices[i];
 
-  for (int i=0; i<vertexIndices.length; i++) {
-    PVector tgt = vertexIndices[i];
-
-    // Check distance and draw line
-    for (int j=i+1; j<vertexIndices.length; j++) {
-      PVector cmp = vertexIndices[j];
+    for (int j=i+1; j<icosaVertexIndices.length; j++) {
+      PVector cmp = icosaVertexIndices[j];
+      // Check distance and set line
       float dist = PVector.dist(tgt, cmp);
       if (int(dist) == int(tl*2)) {
         linesInIcosahedron.add(new Line(tgt, cmp));
@@ -67,15 +64,15 @@ void draw() {
   translate(width / 2, height / 2, -500);
   rotateX(frameCount*0.003);
   rotateY(frameCount*0.003);
-  scale(sin(frameCount*0.01));  // scale whole
+  scale(sin(frameCount*0.02));  // scale whole
 
-  if (sin(frameCount*0.01) > sin(PI)) {
-     //1st cycle is for drawing a icosahedron 
+  if (sin(frameCount*0.02) > sin(PI)) {
+    //1st cycle is for drawing a icosahedron 
     for (Line l : linesInIcosahedron) {
       l.draw();
     }
   } else {
-     //2nd cycle is drawing a cube
+    //2nd cycle is drawing a cube
     for (Line l : linesInCube) {
       l.draw();
     }
@@ -109,7 +106,7 @@ class Box {
   void draw() {
     pushMatrix();
     translate(pos.x, pos.y, pos.z);
-    scale(1/sin(frameCount*0.01));  // fix box's size
+    scale(1/sin(frameCount*0.02));  // fix box's size
     box(boxSize);
     popMatrix();
   }
