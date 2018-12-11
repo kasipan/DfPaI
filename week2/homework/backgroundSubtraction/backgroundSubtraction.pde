@@ -118,7 +118,7 @@ void keyPressed() {
 }
 
 
-// I ' m    s o    s t u p i d . . .
+// just a function to calcurate gap between two angles... Maybe, there is better way.
 float calcurateDiffInCycle(float a, float b, float max) {
   float r = abs(a - b);
 

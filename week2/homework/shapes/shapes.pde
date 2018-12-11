@@ -26,7 +26,7 @@ void setup() {
 
     for (int j=i+1; j<cubeVertexIndices.length; j++) {
       PVector cmp = cubeVertexIndices[j];
-      // Create an Icosahededron
+      // Check distance betweeb each vertex and set line
       float dist = PVector.dist(tgt, cmp);
       if (int(dist) == cl) {
         linesInCube.add(new Line(tgt, cmp));
