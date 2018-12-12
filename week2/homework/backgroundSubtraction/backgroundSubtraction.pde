@@ -21,8 +21,8 @@ ControlP5 cp5;
 
 void setup() {
   size(640, 480);
-  colorMode(HSB, 360, 100, 100);  // how to use hsb parameter in each pixel????
-
+  colorMode(HSB, 360, 100, 100);
+  
   capture = new Capture(this, width, height);
   capture.start();
   pixelsNum = capture.width * capture.height;
@@ -70,9 +70,9 @@ void draw() {
         float currentHue = hue(currentPixels[i]);    // maybe it should use HSV 
         float currentSat = saturation(currentPixels[i]);
         float currentBrt = brightness(currentPixels[i]);
-        int R = (currentPixels[i] >> 16) & 0xFF;
-        int G = (currentPixels[i] >> 8) & 0xFF;
-        int B = currentPixels[i] & 0xFF;
+        int cR = (currentPixels[i] >> 16) & 0xFF;
+        int cG = (currentPixels[i] >> 8) & 0xFF;
+        int cB = currentPixels[i] & 0xFF;
 
         float beforeHue = hue(backgroundPixels[i]); 
         float beforeSat = saturation(backgroundPixels[i]);
@@ -82,12 +82,11 @@ void draw() {
         int bB = backgroundPixels[i] & 0xFF;
 
         float diffHue = calcurateDiffInCycle(currentHue, beforeHue, 360);
-        float diffSat = calcurateDiffInCycle(currentSat, beforeSat, 100);
-        float diffBrt = calcurateDiffInCycle(currentBrt, beforeBrt, 100);
-        //println(diffHue, diffSat);
-        int diffR = abs(R - bR);
-        int diffG = abs(G - bG);
-        int diffB = abs(B - bB);
+        float diffSat = abs(currentSat - beforeSat);
+        float diffBrt = abs(currentBrt - beforeBrt);
+        int diffR = abs(cR - bR);
+        int diffG = abs(cG - bG);
+        int diffB = abs(cB - bB);
         
         
         // if there is a large gap, show current caputured pixel
@@ -118,18 +117,18 @@ void keyPressed() {
 }
 
 
-// just a function to calcurate gap between two angles... Maybe, there is better way.
+// just a function to calcurate gap between two angles... Maybe, there is a better way.
 float calcurateDiffInCycle(float a, float b, float max) {
-  float r = abs(a - b);
+  float s = abs(a - b);
 
   // like 355 - 5, it should be 355 - 365. There must be other proper methods... 
-  if (r > max/2) {
+  if (s > max/2) {
     if (a < b) {
-      r = a+max - b;
+      s = a+max - b;
     }
     if (b < a) {
-      r = b+max - a;
+      s = b+max - a;
     }
   }
-  return r;
+  return s;
 }
