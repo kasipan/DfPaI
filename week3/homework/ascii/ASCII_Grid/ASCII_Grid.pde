@@ -4,7 +4,7 @@ float[] THRESHOLD = {90, 60, 30};
 
 
 void setup() {
-  size(148, 50);
+  size(298, 50);
   colorMode(HSB, 360, 100, 100);
   myMovie = new Movie(this, "sample.mov");
   myMovie.loop();
@@ -14,9 +14,11 @@ void setup() {
 void draw() {
   PImage frame = myMovie.get();
   image(frame, 0, 0);  // in order to avoid uncomprehensive error of resizing, I need to draw image?
-  frame.resize(myMovie.width, int(myMovie.height*0.5) );  // sometimes the parameter cannot be allowed...
   frame.loadPixels();
+  frame.resize(298, 25);
+  //frame.resize(myMovie.width, int(myMovie.height*0.5) );  // often the parameter cannot be allowed...
 
+  
   String charsList = "";
   for (int y = 0; y < frame.height; y++) {    
     for (int x = 0; x < frame.width; x++) {
