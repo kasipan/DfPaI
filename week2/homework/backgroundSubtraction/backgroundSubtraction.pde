@@ -64,6 +64,14 @@ void draw() {
       loadPixels();
 
       currentPixels = capture.pixels;  // update pixels array
+      
+      //println(currentPixels[1]);
+      //println("h:"+hue(currentPixels[1]));
+      //println("s:"+saturation(currentPixels[1]));
+      //println("b:"+brightness(currentPixels[1]));
+      //println("r: "+ str( (currentPixels[1] >> 16) & 0xFF) );
+      //println("g: "+ str(  (currentPixels[1] >> 8) & 0xFF) );
+      //println("b: "+ str(currentPixels[1] & 0xFF) );
 
 
       for (int i=0; i<backgroundPixels.length; i++) {
